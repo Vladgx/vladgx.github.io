@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PNR translate</title>
+</head>
+<script src="https://github.com/Vladgx/PNR/blob/master/aircom.js"></script>
+<script src="https://github.com/Vladgx/PNR/blob/master/airports2.js"></script>
+ <script type="text/javascript">
+   function dayofweek(e)
+   {    
+    if(e)
+    {
+    var day;//переменная для хранения дня недели
+    var result;// здесь храним результаты, полученные от регекспов
+    if (e.length==2)
+    { 
+     day=e;
+     if (day == "SU") day="вс";
+     else if (day == "MO") day="пн";
+     else if (day == "TU") day="вт";
+     else if (day == "WE") day="ср";
+     else if (day == "TH") day="чт";
+     else if (day == "FR") day="пт";
+     else if (day == "SA"){ day="сб"}else day="";
+    }
+    else if(e.length==4)
+    {
+     result=e.match(/\w\w/g)
+     day = dayofweek(result[0]);  
+    }
+    else
+    {
+     result=e.match(/\w\w/g)
+     day = dayofweek(result[0])+"/"+dayofweek(result[1]);// немного рекурсии
+    }
+    } else day="";
+   return day;
+   }
+
+   function dmonth(e)
+   {
+    if(e)
+    {
+    var month = e.substr(2);    
+    if (month == "JAN") month="01";
+    else if (month == "FEB") month="02";
+    else if (month == "MAR") month="03";
+    else if (month == "APR") month="04";
+    else if (month == "MAY") month="05";
+    else if (month == "JUN") month="06";
+    else if (month == "JUL") month="07";
+    else if (month == "AUG") month="08";
+    else if (month == "SEP") month="09";
+    else if (month == "OCT") month="10";
+    else if (month == "NOV") month="11";
+    else if (month == "DEC") month="12";
+    var S=e.substring(0,2)+'.'+month;  
+    }
+    else var S="";
+    return S;
+   }
+
+   function tt(e)
+   {
+    if(e)
+    {
+    e=e[0]+e[1]+':'+e[2]+e[3];
+    }else e="";
+    return e;
+   }
+
+   function ad(e)
+   {
+    for(var key in airports)
+    {
+     if (key==e)
+     {
+      e=airports[key];
+      return e
+     } 
+    }
+   }
+
+   function airc(e)
+   {
+    for(var key in aircoms)
+    {
+     if (key==e)
+     {
+      e=aircoms[key];
+      return e
+     } 
+    }
+   }
+   function dec(e)
+   {
+    if(e)
+    {
+    var str = ad(e.substring(0,3)) + ' - ' + ad(e.substr(3));
+    } else var str="";
+    return str;
+   }
+
+
+   function trsl()
+   {
+     var pnr = document.getElementById("pnr1");//поле ввода от клиента
+     var pnr2 = document.getElementById("pnr2");//поле с результатами нашей работы
+     var segments = pnr.value.split("\n"); //строки с сегментами из бронирования
+     var airp=""; //аэропорты
+     var time1="";//время вылета
+     var time2="";//время прилета
+     var wday="";//день недели
+     var ak="";//авиакомпания
+     var companies = {}; //список авиакомпаний      
+     var fdate="";//дата вылета
+     var flight="";// рейс с названием авиакомпании
+     var result="";//временная переменная. для хранения результатов обработки регекспа
+     pnr2.value="";
+     for(var i=0;i<segments.length;i=i+1)
+     {
+      if((segments[i].indexOf("OPERATED")==-1)&&(segments[i]))
+      {
+              
+        result=segments[i].match(/\w\w\s+\d+/);// ищем рейс и код авиакомпании 
+        if(result){
+          flight=result[0];       
+          ak=flight.substring(0,2);
+         companies[ak]="";
+        }  
+        result=segments[i].match(/\d\d[A-Z]+/);// вырезаем дату по формату 01FEB
+        if(result) fdate=result[0];
+        result=segments[i].match(/\w\w\w\w\w\w|\s\w\w\w\s\w\w\w\s|\s\w\w\w\d\w\w\w\s/);// ищем аэропорты в формате KBPDNK или KBP DNK
+        //console.log(result[0]);
+        if(result) if(result[0].length>6) 
+        {
+          airp=result[0].substring(1,4)+result[0].substring(5,8);
+        }
+        else airp=result[0];
+        //console.log(result);
+        result=segments[i].match(/\d\d\d\d/g)// вырезаем время, время определяем как 4 цифры, но проверяем количество найденого, т.к. номер рейса тоже может быть из 4х цифр
+        if(result) if (result.length<3)//здесь номер рейса состоит менее чем из 4х цифр
+        {
+         time1=result[0];
+         time2=result[1];
+        }else// здесь номер рейса из 4х и более цифр, и поэтому попал в выборку для времени.
+        {
+         time1=result[1];
+         time2=result[2]; 
+        } 
+        result=segments[i].match(/\s\w\w\s|\w\w\/\w\w/g)// из конца строки выделяем день недели
+       if(result) if(result.length>1) wday = result[result.length-1];   
+       // console.log(dayofweek(wday));
+       pnr2.value= pnr2.value+flight+' '+dmonth(fdate)+' '+dayofweek(wday)+' '+dec(airp)+' '+tt(time1)+' '+tt(time2)+"\n"; 
+      } 
+     }
+     pnr2.value="\n"+pnr2.value;
+     //console.log(companies);
+     for(var key in companies)
+     {
+      pnr2.value=" + "+airc(key)+pnr2.value;
+     }
+   } 
+ 
+ </script>
+<body>
+<form action="get">
+ <textarea id="pnr1" name="pnr" rows=10 cols=80></textarea>
+ <br>  
+ <input type='button' value="Перевести" name='translate' onclick="trsl()">
+  <input type="reset" value="Очистить">
+<br>
+<textarea id="pnr2"rows=10 cols=80></textarea>
+</form>
+</body>
+</html>
