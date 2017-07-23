@@ -156,11 +156,18 @@
       } 
      }
      pnr2.value="\n"+pnr2.value;
-     //console.log(companies);
+     var aircomStr ="";
      for(var key in companies)
      {
-      pnr2.value=" + "+airc(key)+pnr2.value;
+      if (aircomStr.length<1) 
+      {
+       aircomStr=airc(key);
+      } else
+      {   
+       aircomStr= aircomStr + " + " +airc(key);
+      } 
      }
+     pnr2.value=aircomStr+pnr2.value; 
    } 
  
  </script>
