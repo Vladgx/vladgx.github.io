@@ -169,7 +169,19 @@
      }
      pnr2.value=aircomStr+pnr2.value; 
    } 
- 
+    function addairp()
+   {
+    var airpc = document.getElementById("airpcode");
+    var airpn = document.getElementById("airpname");
+    airports[airpc.value]=airpn.value;
+  
+   }
+   function addairc()
+   {
+    var paircc = document.getElementById("iairccode");
+    var paircn = document.getElementById("iaircname");
+     aircoms[paircc.value]=paircn.value;
+   }
  </script>
 <body>
 <form action="get">
@@ -179,6 +191,18 @@
   <input type="reset" value="Очистить">
 <br>
 <textarea id="pnr2"rows=10 cols=80></textarea>
+  <br>
+<p>Код аэропорта</p>
+<input type="text" value="" id="airpcode">
+<input type='button' value="Добавить аэропорт" name='btaddairp' onclick="addairp()">
+<p>Название аэропорта</p>
+<input type='text' value="" id='airpname'> 
+<br>
+<p>Код авиакомпании</p>
+<input type="text" value="" id="iairccode"> 
+<input type='button' value="Добавить Авиакомпанию" name='btaddairp' onclick="addairc()">
+<p>Название авиакомпании</p>
+<input type="text" value="" id="iaircname"> 
 </form>
 </body>
 </html>
