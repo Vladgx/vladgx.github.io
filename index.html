@@ -124,6 +124,7 @@
       {
         segments[i]=segments[i]+" ";    
         segments[i].replace('@','');
+        console.log(segments[i]);
         result=segments[i].match(/\w\w\s+\d+/);// ищем рейс и код авиакомпании 
         if(result){
           flight=result[0];       
