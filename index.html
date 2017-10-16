@@ -122,7 +122,8 @@
      {
       if((segments[i].indexOf("OPERATED")==-1)&&(segments[i].indexOf(" ARNK ")==-1)&&(segments[i]))
       {
-        segments[i]=segments[i]+" ";      
+        segments[i]=segments[i]+" ";    
+        segments[i].replace('@','');
         result=segments[i].match(/\w\w\s+\d+/);// ищем рейс и код авиакомпании 
         if(result){
           flight=result[0];       
