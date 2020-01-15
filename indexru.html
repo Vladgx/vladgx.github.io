@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>PNR translate</title>
 </head>
-<script src="airportsua.js"></script>
-<script src="aircomua.js"></script>
+<script src="airports2.js"></script>
+<script src="aircom.js"></script>
  <script type="text/javascript">
    function dayofweek(e)
    {    
@@ -16,7 +16,7 @@
     if (e.length==2)
     { 
      day=e;
-     if (day == "SU") day="нд";
+     if (day == "SU") day="вс";
      else if (day == "MO") day="пн";
      else if (day == "TU") day="вт";
      else if (day == "WE") day="ср";
@@ -162,13 +162,13 @@
      {
       if (aircomStr.length<1) 
       {
-       aircomStr="Авіакомпанія "+airc(key);
+       aircomStr="Авиакомпания "+airc(key);
       } else
       {   
        aircomStr= aircomStr + " + " +airc(key);
       } 
      }
-     pnr2.value=aircomStr+pnr2.value+"Вартість економ класу = "; 
+     pnr2.value=aircomStr+pnr2.value+"Стоимость эконом класса = "; 
    } 
     function addairp()
    {
@@ -188,23 +188,22 @@
 <form action="get">
  <textarea id="pnr1" name="pnr" rows=10 cols=80></textarea>
  <br>  
- <input type='button' value="Перекласти" name='translate' onclick="trsl()">
-  <input type="reset" value="Очистити">
+ <input type='button' value="Перевести" name='translate' onclick="trsl()">
+  <input type="reset" value="Очистить">
 <br>
 <textarea id="pnr2"rows=10 cols=80></textarea>
   <br>
-<p>Код аеропорту</p>
+<p>Код аэропорта</p>
 <input type="text" value="" id="airpcode">
-<input type='button' value="Додати аеропорт" name='btaddairp' onclick="addairp()">
-<p>Назва аеропорту</p>
+<input type='button' value="Добавить аэропорт" name='btaddairp' onclick="addairp()">
+<p>Название аэропорта</p>
 <input type='text' value="" id='airpname'> 
 <br>
-<p>Код авіакомпанії</p>
+<p>Код авиакомпании</p>
 <input type="text" value="" id="iairccode"> 
-<input type='button' value="Додати Авіакомпанію" name='btaddairp' onclick="addairc()">
-<p>Назва авіакомпанії</p>
+<input type='button' value="Добавить Авиакомпанию" name='btaddairp' onclick="addairc()">
+<p>Название авиакомпании</p>
 <input type="text" value="" id="iaircname"> 
 </form>
-<a href='indexru.html'>Російською</a>
 </body>
 </html>
